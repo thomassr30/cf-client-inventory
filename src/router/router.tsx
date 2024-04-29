@@ -15,15 +15,27 @@ const UsersView = lazy(() =>
   import("@/views/users").then((module) => ({ default: module.UsersView }))
 );
 
-const LocationView = lazy(() => import("@/views/locations").then((module) => ({default: module.LocationView})));
+const LocationView = lazy(() =>
+  import("@/views/locations").then((module) => ({
+    default: module.LocationView,
+  }))
+);
 
-const SectionView = lazy(() => import("@/views/sections").then((module) => ({default: module.SectionView})));
+const SectionView = lazy(() =>
+  import("@/views/sections").then((module) => ({ default: module.SectionView }))
+);
 
-const ItemView = lazy(() => import("@/views/items").then((module) => ({default: module.ItemView})))
+const ItemView = lazy(() =>
+  import("@/views/items").then((module) => ({ default: module.ItemView }))
+);
 
 //const ScannerQrView = lazy(() => import("@/views/scanner").then((module) => ({default: module.ScannerQrView})))
 
-const ScannerListView = lazy(() => import("@/views/scannerList").then((module) => ({default: module.ScannerListView})))
+const ScannerListView = lazy(() =>
+  import("@/views/scannerList").then((module) => ({
+    default: module.ScannerListView,
+  }))
+);
 
 const LoginView = lazy(() =>
   import("@/views/auth/login").then((module) => ({
@@ -51,10 +63,8 @@ export const router = (userRole: string) =>
               element: <DashboardView />,
             },
             {
-              path: "voluntarios",
-              element: hasAccess(userRole, [
-                "ADMIN",
-              ]) ? (
+              path: "usuarios",
+              element: hasAccess(userRole, ["ADMIN"]) ? (
                 <UsersView />
               ) : (
                 <Navigate to="/dashboard/inicio" />
@@ -62,9 +72,7 @@ export const router = (userRole: string) =>
             },
             {
               path: "locacion",
-              element: hasAccess(userRole, [
-                "ADMIN", "OFICIAL",
-              ]) ? (
+              element: hasAccess(userRole, ["ADMIN", "OFICIAL"]) ? (
                 <LocationView />
               ) : (
                 <Navigate to="/dashboard/inicio" />
@@ -72,9 +80,7 @@ export const router = (userRole: string) =>
             },
             {
               path: "secciones",
-              element: hasAccess(userRole, [
-                "ADMIN", "OFICIAL",
-              ]) ? (
+              element: hasAccess(userRole, ["ADMIN", "OFICIAL"]) ? (
                 <SectionView />
               ) : (
                 <Navigate to="/dashboard/inicio" />
@@ -82,9 +88,7 @@ export const router = (userRole: string) =>
             },
             {
               path: "items",
-              element: hasAccess(userRole, [
-                "ADMIN",
-              ]) ? (
+              element: hasAccess(userRole, ["ADMIN"]) ? (
                 <ItemView />
               ) : (
                 <Navigate to="/dashboard/inicio" />
@@ -111,13 +115,13 @@ export const router = (userRole: string) =>
           ],
         },
         {
-          path: 'lector-qr',
-          element: <ScannerQrView />
+          path: "lector-qr",
+          element: <ScannerQrView />,
         },
         {
           path: "seccion/:id",
-          element: <ScannerListView />
-        }
+          element: <ScannerListView />,
+        },
       ],
     },
   ]);

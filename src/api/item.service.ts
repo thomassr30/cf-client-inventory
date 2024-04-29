@@ -37,4 +37,14 @@ export class ItemService{
             throw new Error("Error al actualizar item");
         }
     }
+
+    static deleteItem = async (id: number) => {
+        try {
+            const response = await api.delete(`/item/${id}`);
+            return response;
+        } catch (error) {
+            throw new Error("Error al eliminar item");
+        }
+    }
+
 }

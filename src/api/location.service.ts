@@ -29,4 +29,13 @@ export class LocationService{
             throw new Error("Error al actualizar location");
         }
     }
+
+    static deleteLocation = async (id: string): Promise<any> => {
+        try {
+            const {data} = await api.delete<ILocation>(`/location/${id}`);
+            return data;
+        } catch (error) {
+            throw new Error("Error al eliminar location");
+        }
+    }
 }

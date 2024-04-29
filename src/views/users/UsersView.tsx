@@ -15,7 +15,6 @@ interface RowData {
 
 export const UsersView = () => {
   const query = useGetUsers();
-  console.log(query.data?.data);
 
   const handleEdit = (row: any) => {
     console.log(row);

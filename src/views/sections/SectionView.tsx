@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useGetLocation } from "@/hooks/useGetLocation";
 import { AddButon } from "@/shared/components/addButon/AddButon";
 import { Loading } from "@/shared/components/loading/Loading";
-import { MdEdit } from "react-icons/md";
+import { MdEdit, MdDelete } from "react-icons/md";
 import IconButton from "@mui/material/IconButton";
 import { IoEyeSharp } from "react-icons/io5";
 import {
@@ -25,6 +25,7 @@ import { useGetSection } from "@/hooks/useGetSection";
 import { ILocation } from "interfaces/location.interface";
 import { SectionService } from "@/api/section.service";
 import { ListItemComponent } from "@/shared/components/listItemComponent/ListItemComponent";
+import { DialogConfirm } from "@/shared/components/dialogConfirm/DialogConfirm";
 
 export const SectionView = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -34,6 +35,8 @@ export const SectionView = () => {
     undefined
   );
   const [idLocation, setidLocation] = useState<string>("");
+  const [showDialog, setshowDialog] = useState(false);
+  const [id, setId] = useState<string>("");
 
   const query = useGetLocation();
   const { data, isLoading, refetch, isRefetching } = useGetSection();
@@ -42,6 +45,17 @@ export const SectionView = () => {
   if (isLoading || isRefetching) {
     return <Loading />;
   }
+
+  const handleDeleteSection = async (id: string) => {
+    setshowDialog(true);
+    setId(id);
+  };
+
+  const closeDialog = () => {
+    setshowDialog(false);
+    setId("");
+    refetch();
+  };
 
   const handleOpen = (data?: ISection | null) => {
     setOpen(true);
@@ -129,12 +143,23 @@ export const SectionView = () => {
                       <IoEyeSharp />
                     </IconButton>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell
+                    align="right"
+                    sx={{ display: "flex", flexDirection: "row" }}
+                  >
                     <IconButton
+                      color="primary"
                       aria-label="delete"
                       onClick={() => handleOpen(row)}
                     >
                       <MdEdit />
+                    </IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      color="error"
+                      onClick={() => handleDeleteSection(row.id ?? "")}
+                    >
+                      <MdDelete />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -232,6 +257,14 @@ export const SectionView = () => {
           <ListItemComponent locationId={idLocation} />
         </>
       </Modal>
+      <DialogConfirm
+        open={showDialog}
+        handleClose={closeDialog}
+        option="section"
+        title="Eliminar Sección"
+        description="¿Estás seguro de eliminar esta Sección?"
+        id={id}
+      />
     </div>
   );
 };

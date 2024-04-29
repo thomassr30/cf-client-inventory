@@ -13,8 +13,8 @@ export const menuItems: IMenuItem[] = [
     roles: ["ADMIN"],
   },
   {
-    path: "/dashboard/voluntarios",
-    label: "Voluntarios",
+    path: "/dashboard/usuarios",
+    label: "Usuarios",
     icon: PiUsersFour,
     roles: [
       "ADMIN",

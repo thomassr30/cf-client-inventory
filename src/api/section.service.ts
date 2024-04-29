@@ -30,4 +30,13 @@ export class SectionService{
         }
     }
 
+    static deleteSection = async (id: string): Promise<any> => {
+        try {
+            const {data} = await api.delete<ISection>(`/section/${id}`);
+            return data;
+        } catch (error) {
+            throw new Error("Error al eliminar section");
+        }
+    }
+
 }

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useGetLocation } from "@/hooks/useGetLocation";
 import { AddButon } from "@/shared/components/addButon/AddButon";
 import { Loading } from "@/shared/components/loading/Loading";
-import { MdEdit } from "react-icons/md";
+import { MdEdit, MdDelete } from "react-icons/md";
 import IconButton from "@mui/material/IconButton";
 import {
   Modal,
@@ -17,6 +17,7 @@ import {
 import { useForm } from "react-hook-form";
 import { ILocation } from "interfaces/location.interface";
 import { LocationService } from "@/api/location.service";
+import { DialogConfirm } from "@/shared/components/dialogConfirm/DialogConfirm";
 
 export const LocationView = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -24,6 +25,8 @@ export const LocationView = () => {
   const [locationData, setlocationData] = useState<ILocation | undefined>(
     undefined
   );
+  const [showDialog, setshowDialog] = useState(false);
+  const [id, setId] = useState<string>("");
 
   const { data, isLoading, refetch, isRefetching } = useGetLocation();
   const { register, handleSubmit, reset } = useForm();
@@ -47,6 +50,17 @@ export const LocationView = () => {
       setlocationData(undefined);
       setisEdit(false);
     }
+  };
+
+  const handleDeleteLocation = async (id: string) => {
+    setshowDialog(true);
+    setId(id);
+  };
+
+  const closeDialog = () => {
+    setshowDialog(false);
+    setId("");
+    refetch();
   };
 
   const onSubmit = handleSubmit(async (data) => {
@@ -95,12 +109,23 @@ export const LocationView = () => {
                   </TableCell>
                   <TableCell align="right">{row.name}</TableCell>
                   <TableCell align="right">{row.description}</TableCell>
-                  <TableCell align="right">
+                  <TableCell
+                    align="right"
+                    sx={{ display: "flex", flexDirection: "row" }}
+                  >
                     <IconButton
-                      aria-label="delete"
+                      aria-label="edit"
+                      color="primary"
                       onClick={() => handleOpen(row)}
                     >
                       <MdEdit />
+                    </IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      color="error"
+                      onClick={() => handleDeleteLocation(row.id ?? "")}
+                    >
+                      <MdDelete />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -160,6 +185,14 @@ export const LocationView = () => {
           </form>
         </div>
       </Modal>
+      <DialogConfirm
+        open={showDialog}
+        handleClose={closeDialog}
+        option="location"
+        title="Eliminar locación"
+        description="¿Estás seguro de eliminar esta locación?"
+        id={id}
+      />
     </div>
   );
 };

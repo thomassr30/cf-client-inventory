@@ -1,6 +1,7 @@
 import { ItemService } from "@/api/item.service";
 import { useGetSection } from "@/hooks/useGetSection";
 import { AddButon } from "@/shared/components/addButon/AddButon";
+import { DialogConfirm } from "@/shared/components/dialogConfirm/DialogConfirm";
 import { Loading } from "@/shared/components/loading/Loading";
 import {
   Autocomplete,
@@ -21,7 +22,7 @@ import {
 import { IGetItemBySection, IItemData } from "interfaces/item.interface";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { MdChecklist, MdEdit } from "react-icons/md";
+import { MdChecklist, MdEdit, MdDelete } from "react-icons/md";
 
 export const ItemView = () => {
   const [itemData, setitemData] = useState<IGetItemBySection | undefined>();
@@ -34,10 +35,26 @@ export const ItemView = () => {
   const [itemId, setitemId] = useState<number | undefined>(undefined);
   const [successData, setsuccessData] = useState(false);
   const [errorData, seterrorData] = useState(false);
+  const [showDialog, setshowDialog] = useState(false);
+  const [id, setId] = useState<number>(0);
+  const [sectionId, setsectionId] = useState<string>("");
 
   const { register, handleSubmit, reset, control } = useForm();
 
   const allSection = useGetSection();
+
+  const handleDeleteItem = async (id: number) => {
+    setshowDialog(true);
+    setId(id);
+  };
+
+  const closeDialog = async () => {
+    setshowDialog(false);
+    setId(0);
+    const result = await getItems(sectionId);
+    setitemData(result);
+    setsectionId("");
+  };
 
   const handleOpen = (data?: IItemData | undefined) => {
     if (data) {
@@ -60,6 +77,7 @@ export const ItemView = () => {
 
   const handleSelectionChange = async (event: any, newValue: any | null) => {
     setisloading(true);
+    setsectionId(newValue.id);
     const result = await getItems(newValue.id);
     setitemData(result);
     setisloading(false);
@@ -123,6 +141,7 @@ export const ItemView = () => {
             sx={{ width: "100%" }}
             renderInput={(params) => <TextField {...params} label="section" />}
             onChange={handleSelectionChange}
+            disableClearable
           />
         </div>
 
@@ -155,12 +174,22 @@ export const ItemView = () => {
                     <TableCell align="right">{row.name}</TableCell>
                     <TableCell align="right">{row.description}</TableCell>
                     <TableCell align="right">{row.quantity}</TableCell>
-                    <TableCell align="right">
+                    <TableCell
+                      align="right"
+                      sx={{ display: "flex", flexDirection: "row" }}
+                    >
                       <IconButton
                         aria-label="delete"
                         onClick={() => handleOpen(row)}
                       >
                         <MdEdit />
+                      </IconButton>
+                      <IconButton
+                        aria-label="delete"
+                        color="error"
+                        onClick={() => handleDeleteItem(row.id ?? "")}
+                      >
+                        <MdDelete />
                       </IconButton>
                     </TableCell>
                   </TableRow>
@@ -188,7 +217,7 @@ export const ItemView = () => {
       >
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white lg:w-[700px] w-3/4 p-5 rounded-xl">
           <h1 className="my-3 text-3xl text-gray-500">
-            {isEdit ? `Editar ${dataSelected?.name}` : "Crear Sección"}
+            {isEdit ? `Editar ${dataSelected?.name}` : "Crear Item"}
           </h1>
           {successData && (
             <div className="bg-green-100 border-2 border-green-400 rounded-md my-3">
@@ -284,6 +313,14 @@ export const ItemView = () => {
           </form>
         </div>
       </Modal>
+      <DialogConfirm
+        open={showDialog}
+        handleClose={closeDialog}
+        option="item"
+        title="Eliminar Item"
+        description="¿Estás seguro de eliminar éste item?"
+        id={id}
+      />
     </div>
   );
 };
