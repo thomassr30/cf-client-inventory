@@ -41,13 +41,15 @@ export const LoginView = () => {
         <div
           className={`flex items-center border-2 mb-8 py-2 px-3 rounded-2xl ${
             errors.email ? "border-red-500" : "border-green-300"
-          }`}>
+          }`}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 text-gray-400"
             fill="none"
             viewBox="0 0 24 24"
-            stroke="currentColor">
+            stroke="currentColor"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -70,12 +72,14 @@ export const LoginView = () => {
         <div
           className={`flex items-center border-2 mb-12 py-2 px-3 rounded-2xl ${
             errors.password ? "border-red-500" : "border-green-300"
-          }`}>
+          }`}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 text-gray-400"
             viewBox="0 0 20 20"
-            fill="currentColor">
+            fill="currentColor"
+          >
             <path
               fillRule="evenodd"
               d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
@@ -94,7 +98,8 @@ export const LoginView = () => {
         </div>
         <button
           type="submit"
-          className="block w-full bg-green-400 text-white mt-5 py-2 rounded-2xl hover:bg-green-300 hover:text-white font-semibold mb-2">
+          className="block w-full bg-green-400 text-white mt-5 py-2 rounded-2xl hover:bg-green-300 hover:text-white font-semibold mb-2"
+        >
           Ingresar
         </button>
         <div className="flex items-center my-5">
@@ -102,11 +107,15 @@ export const LoginView = () => {
           <span className="mx-2 text-gray-500 text-xl">o</span>
           <div className="flex-1 h-0.5 bg-gray-400"></div>
         </div>
-        <div className="flex flex-col lg:flex-none items-center justify-center lg:justify-between mt-4">
+        <div className="flex flex-col items-center justify-center mt-4">
           <NavLink
             to="/lector-qr"
-            className="text-sm ml-2 mt-4 lg:mt-0">
+            className="text-sm ml-2 mt-4 lg:mt-0 flex flex-col items-center justify-center"
+          >
             <BsQrCode className="text-7xl" />
+            <span className="text-gray-600 text-sm mt-2">
+              Escanear Código QR
+            </span>
           </NavLink>
         </div>
       </form>
